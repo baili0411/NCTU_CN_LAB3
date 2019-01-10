@@ -32,7 +32,7 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
     Access the container. Didn't change the password
     * Step 3: Clone your Github repository and setup Git in the container.  
     First, setup global username and email
-    
+
 
 2. Example of Ryu SDN
 
@@ -69,9 +69,6 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
 ---
 ## References
 
-> TODO: 
-> * Please add your references in the following
-
 * **Ryu SDN**
     * [Ryubook Documentation](https://osrg.github.io/ryu-book/en/html/)
     * [Ryubook [PDF]](https://osrg.github.io/ryu-book/en/Ryubook.pdf)
@@ -87,8 +84,6 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
     * [Python Tutorial - Tutorialspoint](https://www.tutorialspoint.com/python/)
 * **Others**
     * [Cheat Sheet of Markdown Syntax](https://www.markdownguide.org/cheat-sheet)
-    * [Vim Tutorial – Tutorialspoint](https://www.tutorialspoint.com/vim/index.htm)
-    * [鳥哥的 Linux 私房菜 – 第九章、vim 程式編輯器](http://linux.vbird.org/linux_basic/0310vi.php)
 
 ---
 ## Contributors
