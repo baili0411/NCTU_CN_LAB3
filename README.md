@@ -26,10 +26,11 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
 
 ### Tasks
 
-> TODO:
-> * Describe how you finish this work in detail
-
 1. Environment Setup
+    * Step 1: Join this lab on GitHub Classroom and get initial repository
+    * Step 2: Login in to container in SSH.  
+    Access the container. Didn't change the password
+    * Step 3:
 
 2. Example of Ryu SDN
 
