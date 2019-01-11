@@ -129,6 +129,10 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
 4. Ryu Controller
     * Step 1. Trace the code of Ryu controller  
         ```
+        class SimpleController1(app_manager.RyuApp):
+        ```
+        Our SimpleController1 class inherits from app_manager.RyuApp.
+        ```
         def __init__(self, *args, **kwargs):
             super(SimpleController1, self).__init__(*args, **kwargs)
             self.topology_api = self
@@ -148,9 +152,11 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
         ofproto = datapath.ofproto
         parser = datapath.ofproto_parser      
         ```
-        Obtaining the protocol and parser used from datapath.
+        Obtain the protocol and parser OpenFlow and Ryu negotiated of a switch.  
         ```
         inst = [parser.OFPInstructionActions(ofproto.OFPIT_APPLY_ACTIONS, actions)]
+        ```
+        inst is a OpenFlow action instruction of type OFPIT_APPLY_ACTIONS under the current protocol, so it applies the actions from the action list, with the action list being "actions", the actions passed in from the function.
         ```
         mod = parser.OFPFlowMod(
             datapath=datapath,
@@ -161,9 +167,87 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
             idle_timeout=0,
             hard_timeout=0,
             cookie=0)
+        ```
+        mod is a OpenFlow Modify Flow message, used to modify the flow table.  
+        We set the datapath, priority by using the datapath and priority passed in the function.  
+
+        match is a flow match defined using arguments. Here, we use the match passed in through the function.  
+
+        instructions is the list of instructions used in the message, we use the inst we defined before.  
+
+        Setting command to ofproto.OFPFC_ADD means that we add this flow to the flow table.  
+
+        idle_timeout and hard_timeout are the idle time and max time before discarding, respectively.  
+
+        Cookie is a controller-issued identifier.
+
+        ```
         datapath.send_msg(mod)
         ```
-        ofproto = datapath.ofproto and parser = datapath.ofproto_parser   
+        We send the OpenFlow message we defined and wait for a reply.
+
+        ```
+        @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
+        def switch_features_handler(self, ev):
+        ```
+        The decorator means that this is now an event handler, and triggers when we get a features reply message from OpenFlow.  
+        CONFIG_DISPATCHER means that a version negotiated and sent features-request message event should be generated for this handler.
+        ```
+        msg = ev.msg
+        datapath = msg.datapath
+        ofproto = datapath.ofproto
+        parser = datapath.ofproto_parser
+        ```
+        msg gets packet_in info from ev.msg.
+        We set the router as obtained from msg.datapath.
+        Then, we obtain the protocol and parser from datapath.
+        ```
+        match = parser.OFPMatch()
+        actions = [parser.OFPActionOutput(ofproto.OFPP_CONTROLLER, ofproto.OFPCML_NO_BUFFER)]
+        self.add_flow(
+            datapath=datapath,
+            priority=0,
+            match=match,
+            actions=actions)
+        ```
+        OFPMatch() means that our match gets packets with and without a VLAN tag.
+        Our actions contains a action that sends a packet to the controller(because of ofproto.OFPP_CONTROLLER) created by parser.OFPActionOutput.  
+        OFPCML_NO_BUFFER is a constant, which means that this packet will be added to the packet-in message instead of saving to the OpenFlow buffer.
+        We then use these information and call add_flow to add the flow.
+
+        The following two parts are mainly the same structure, but slightly different depending on the switch and the flows we want to create.
+
+        ```
+        if msg.datapath.id == 1:
+        ```
+        Check the id of the switch and determine what flows we should add to it.
+
+        This is one example of a flow
+        ```
+         match = parser.OFPMatch(
+                in_port=1,
+                eth_type=0x0800,
+                ipv4_src="10.0.0.1",
+                ipv4_dst="10.0.0.2",
+                ip_proto=17,
+                udp_dst=5566)
+            actions = [parser.OFPActionOutput(3)]
+            self.add_flow(
+                datapath=datapath,
+                priority=3,
+                match=match,
+                actions=actions)
+        ```
+        match is created by the OFPMATCH, with the arguments defined int.
+        The action is created by OFPActionOutput, which we send a packet to port 3.
+        we then call add_flow to add the flow.  
+        The other flows are created similarly.
+
+        ```
+        @set_ev_cls(ofp_event.EventOFPPacketIn, MAIN_DISPATCHER)
+
+        ```
+        
 
 5. Measurement
 
@@ -196,6 +280,7 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
 
 * **Ryu SDN**
     * [Ryu Documentation](https://ryu.readthedocs.io/en/latest/index.html)
+    * [Ryu SDN Framework Documentation](https://osrg.github.io/ryu-book/zh_tw/html/)
 * **Mininet**
     * [Introduction to Mininet](https://github.com/mininet/mininet/wiki/Introduction-to-Mininet)
 * **Others**
