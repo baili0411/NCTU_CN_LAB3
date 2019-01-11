@@ -450,6 +450,15 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
     ryu-manager SimpleController.py --observe-links
     ```
     ![results](task5_simplecon.png)
+
+    * Step 2. Measure the bandwidth  
+    Use the iPerf commands to measure bandwidth
+    ```
+    h1 iperf -s -u -i 1 –p 5566 > ./out/result1 &
+    h2 iperf -c 10.0.0.1 -u –i 1 –p 5566
+    ```
+    h1 is the server, and h2 is the client, use UDP with port 5566, output of h1 not shown on screen, saved to /out/result1.
+    ![results](iperf_execute_simpletopo.png)
 ### Discussion
 
 > TODO:
