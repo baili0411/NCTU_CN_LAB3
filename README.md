@@ -72,9 +72,11 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
     Run SimpleController.py
         ```
         cd Route_Configuration/src
-        ryu-manager SimpleController.py --observelinks loading app 
+        ryu-manager SimpleController.py --observe-links
         ```
-        
+        ryu-mangager --observerlinks means that we observe link discovery events.
+        Result after running SimpleController.py
+        ![Results](ryu_manager_sample.png)
 3. Mininet Topology
 
 4. Ryu Controller
