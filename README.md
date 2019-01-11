@@ -110,9 +110,6 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
 
 * **Ryu SDN**
     * [Ryu Documentation](https://ryu.readthedocs.io/en/latest/man/ryu_manager.html?highlight=--observe)
-* **Python**
-    * [Python 2.7.15 Standard Library](https://docs.python.org/2/library/index.html)
-    * [Python Tutorial - Tutorialspoint](https://www.tutorialspoint.com/python/)
 * **Mininet**
     * [Introduction to Mininet](https://github.com/mininet/mininet/wiki/Introduction-to-Mininet)
 * **Others**
