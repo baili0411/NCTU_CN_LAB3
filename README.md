@@ -33,7 +33,8 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
     * Step 3: Clone your Github repository and setup Git in the container.  
     First, setup global username and email
     ```
-
+        git config --global user.name "Baili Deng"
+        git config --global user.email "rayman0411@gmail.com"
     ```
 
 2. Example of Ryu SDN
