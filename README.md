@@ -52,7 +52,11 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
         ```
         ![Results](service_result.png)
 2. Example of Ryu SDN
-
+    * Step 1. Login to your container in two terminals
+    Used tmux and create a new panel.
+    ```
+    tmux
+    ```
 3. Mininet Topology
 
 4. Ryu Controller
@@ -102,6 +106,7 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
 * **Others**
     * [Cheat Sheet of Markdown Syntax](https://www.markdownguide.org/cheat-sheet)
     * [Git Setup Guide](https://git-scm.com/book/zh-tw/v2/%E9%96%8B%E5%A7%8B-%E5%88%9D%E6%AC%A1%E8%A8%AD%E5%AE%9A-Git)
+    * [Tmux shortcuts and cheatsheat](https://gist.github.com/MohamedAlaa/2961058)
 
 ---
 ## Contributors
