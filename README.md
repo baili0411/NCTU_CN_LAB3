@@ -357,6 +357,86 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
         We need to change paths to:  
         h1 -> s1 -> s3 -> h2  
         h2 -> s3 -> s2 -> s1 -> h1 
+        ```
+        # Add forwarding rule in s1
+        if msg.datapath.id == 1:
+            # For h1-h2 flow: h1 -> s1 -> s3
+            match = parser.OFPMatch(
+                in_port=1,
+                eth_type=0x0800,
+                ipv4_src="10.0.0.1",
+                ipv4_dst="10.0.0.2",
+                ip_proto=17,
+                udp_dst=5566)
+            actions = [parser.OFPActionOutput(3)]
+            self.add_flow(
+                datapath=datapath,
+                priority=3,
+                match=match,
+                actions=actions)
+            # For h2-h1 flow: s2 -> s1 -> h1
+            match = parser.OFPMatch(
+                in_port=2,
+                eth_type=0x0800,
+                ipv4_src="10.0.0.2",
+                ipv4_dst="10.0.0.1",
+                ip_proto=17,
+                udp_dst=5566)
+            actions = [parser.OFPActionOutput(1)]
+            self.add_flow(
+                datapath=datapath,
+                priority=3,
+                match=match,
+                actions=actions)
+            
+        # Add forwarding rule in s3
+        if msg.datapath.id == 3:
+            # For h2-h1 flow: h2 -> s3 -> s2
+            match = parser.OFPMatch(
+                in_port=1,
+                eth_type=0x0800,
+                ipv4_src="10.0.0.2",
+                ipv4_dst="10.0.0.1",
+                ip_proto=17,
+                udp_dst=5566)
+            actions = [parser.OFPActionOutput(3)]
+            self.add_flow(
+                datapath=datapath,
+                priority=3,
+                match=match,
+                actions=actions)
+            # For h1-h2 flow: s1 -> s3 -> h2
+            match = parser.OFPMatch(
+                in_port=2,
+                eth_type=0x0800,
+                ipv4_src="10.0.0.1",
+                ipv4_dst="10.0.0.2",
+                ip_proto=17,
+                udp_dst=5566)
+            actions = [parser.OFPActionOutput(1)]
+            self.add_flow(
+                datapath=datapath,
+                priority=3,
+                match=match,
+                actions=actions)
+
+        # Add forwarding rule in s2
+        if msg.datapath.id == 2:
+            # For h2-h1 flow: s3 -> s2 -> s1
+            match = parser.OFPMatch(
+                in_port=2,
+                eth_type=0x0800,
+                ipv4_src="10.0.0.2",
+                ipv4_dst="10.0.0.1",
+                ip_proto=17,
+                udp_dst=5566)
+            actions = [parser.OFPActionOutput(1)]
+            self.add_flow(
+                datapath=datapath,
+                priority=3,
+                match=match,
+                actions=actions)
+        ```
 
 5. Measurement
 
