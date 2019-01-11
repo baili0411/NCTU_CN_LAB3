@@ -438,8 +438,18 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
                 actions=actions)
         ```
 
-5. Measurement
-
+5. Measurement  
+    * Step 1. Run topology with SimpleController.py  
+    Run topo.py in one panel first.
+    ```
+    mn --custom topo.py --topo topo --link tc --controller remote
+    ```
+    ![results](topo_mn_task5.png)
+    Then run simple controller in another panel.
+    ```
+    ryu-manager SimpleController.py --observe-links
+    ```
+    ![results](task5_simplecon.png)
 ### Discussion
 
 > TODO:
