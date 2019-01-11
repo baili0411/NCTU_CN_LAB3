@@ -127,6 +127,43 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
         ```
         ![result](topo_ryu_result.png)
 4. Ryu Controller
+    * Step 1. Trace the code of Ryu controller  
+        ```
+        def __init__(self, *args, **kwargs):
+            super(SimpleController1, self).__init__(*args, **kwargs)
+            self.topology_api = self
+            self.mac_to_port = {}
+            self.net = nx.DiGraph()
+            self.nodes = {}
+            self.links = {}
+        ```
+        Initalization of class.  
+        super(SimpleController1, self).__init__(*args, **kwargs) means that we use SimpleController1's parent class's __init__.  
+        The reset of the lines are just initalizing the other things of the class with clean bases, such as empty python dictionaries, or in the case of self.net, a base directed graph in NetworkX.
+        ```
+        def add_flow(self, datapath, priority, match, actions):
+        ```
+        Note that there is no decoration for Ryu, and this function is only called by other functions in the function.  
+        ```
+        ofproto = datapath.ofproto
+        parser = datapath.ofproto_parser      
+        ```
+        Obtaining the protocol and parser used from datapath.
+        ```
+        inst = [parser.OFPInstructionActions(ofproto.OFPIT_APPLY_ACTIONS, actions)]
+        ```
+        mod = parser.OFPFlowMod(
+            datapath=datapath,
+            priority=priority,
+            match=match,
+            instructions=inst,
+            command=ofproto.OFPFC_ADD,
+            idle_timeout=0,
+            hard_timeout=0,
+            cookie=0)
+        datapath.send_msg(mod)
+        ```
+        ofproto = datapath.ofproto and parser = datapath.ofproto_parser   
 
 5. Measurement
 
@@ -158,7 +195,7 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
 ## References
 
 * **Ryu SDN**
-    * [Ryu Documentation](https://ryu.readthedocs.io/en/latest/man/ryu_manager.html?highlight=--observe)
+    * [Ryu Documentation](https://ryu.readthedocs.io/en/latest/index.html)
 * **Mininet**
     * [Introduction to Mininet](https://github.com/mininet/mininet/wiki/Introduction-to-Mininet)
 * **Others**
