@@ -51,12 +51,30 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
         mn
         ```
         ![Results](service_result.png)
+
 2. Example of Ryu SDN
     * Step 1. Login to your container in two terminals
     Used tmux and create a new panel.
-    ```
-    tmux
-    ```
+        ```
+        tmux
+        ```
+    * Step 2. Run Mininet topology  
+    Run SimpleTopo.py in one panel.  
+        ```
+        cd Route_Configuration/src
+        mn --custom SimpleTopo.py --topo topo --link tc --controller remote
+        ```
+        Result after running SimpleTopo.py  
+        --custom means we run mn, and invoke the "topo" topology constructor, the "tc" link constructor, and the "remote" controller constructor in SimpleTopo.py
+    ![Results](mininet_sample_result.png)
+    * Step 3. Run SimpleController.py in another terminal
+    Switch the pane.
+    Run SimpleController.py
+        ```
+        cd Route_Configuration/src
+        ryu-manager SimpleController.py --observelinks loading app 
+        ```
+        
 3. Mininet Topology
 
 4. Ryu Controller
@@ -91,18 +109,12 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
 ## References
 
 * **Ryu SDN**
-    * [Ryubook Documentation](https://osrg.github.io/ryu-book/en/html/)
-    * [Ryubook [PDF]](https://osrg.github.io/ryu-book/en/Ryubook.pdf)
-    * [Ryu 4.30 Documentation](https://github.com/mininet/mininet/wiki/Introduction-to-Mininet)
-    * [Ryu Controller Tutorial](http://sdnhub.org/tutorials/ryu/)
-    * [OpenFlow 1.3 Switch Specification](https://www.opennetworking.org/wp-content/uploads/2014/10/openflow-spec-v1.3.0.pdf)
-    * [Ryubook 說明文件](https://osrg.github.io/ryu-book/zh_tw/html/)
-    * [GitHub - Ryu Controller 教學專案](https://github.com/OSE-Lab/Learning-SDN/blob/master/Controller/Ryu/README.md)
-    * [Ryu SDN 指南 – Pengfei Ni](https://feisky.gitbooks.io/sdn/sdn/ryu.html)
-    * [OpenFlow 通訊協定](https://osrg.github.io/ryu-book/zh_tw/html/openflow_protocol.html)
+    * [Ryu Documentation](https://ryu.readthedocs.io/en/latest/man/ryu_manager.html?highlight=--observe)
 * **Python**
     * [Python 2.7.15 Standard Library](https://docs.python.org/2/library/index.html)
     * [Python Tutorial - Tutorialspoint](https://www.tutorialspoint.com/python/)
+* **Mininet**
+    * [Introduction to Mininet](https://github.com/mininet/mininet/wiki/Introduction-to-Mininet)
 * **Others**
     * [Cheat Sheet of Markdown Syntax](https://www.markdownguide.org/cheat-sheet)
     * [Git Setup Guide](https://git-scm.com/book/zh-tw/v2/%E9%96%8B%E5%A7%8B-%E5%88%9D%E6%AC%A1%E8%A8%AD%E5%AE%9A-Git)
