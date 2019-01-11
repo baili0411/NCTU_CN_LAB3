@@ -115,6 +115,12 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
         self.addLink(s1, s2, port1=2, port2=1, bw = 30, delay = '2ms', loss = 1)          
         self.addLink(s3, s2, port1=3, port2=2, bw = 20, delay = '2ms', loss = 1) 
         ```
+    * Step 2. Run Mininet topology and controller
+    Run topo.py first in one panel
+    ```
+     mn --custom topo.py --topo topo --link tc --controller remote
+    ```
+    ![result](topo_mn_result.png)
 4. Ryu Controller
 
 5. Measurement
