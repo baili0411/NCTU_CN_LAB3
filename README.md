@@ -440,25 +440,64 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
 
 5. Measurement  
     * Step 1. Run topology with SimpleController.py  
-    Run topo.py in one panel first.
-    ```
-    mn --custom topo.py --topo topo --link tc --controller remote
-    ```
-    ![results](topo_mn_task5.png)
-    Then run simple controller in another panel.
-    ```
-    ryu-manager SimpleController.py --observe-links
-    ```
-    ![results](task5_simplecon.png)
+        Run topo.py in one panel first.
+        ```
+        mn --custom topo.py --topo topo --link tc --controller remote
+        ```
+        ![results](topo_mn_task5.png)
+        Then run SimpleController.py in another panel.
+        ```
+        ryu-manager SimpleController.py --observe-links
+        ```
+        ![results](task5_simplecon.png)
 
     * Step 2. Measure the bandwidth  
-    Use the iPerf commands to measure bandwidth
-    ```
-    h1 iperf -s -u -i 1 –p 5566 > ./out/result1 &
-    h2 iperf -c 10.0.0.1 -u –i 1 –p 5566
-    ```
-    h1 is the server, and h2 is the client, use UDP with port 5566, output of h1 not shown on screen, saved to /out/result1.
-    ![results](iperf_execute_simpletopo.png)
+        Use the iPerf commands to measure bandwidth
+        ```
+        h1 iperf -s -u -i 1 –p 5566 > ./out/result1 &
+        h2 iperf -c 10.0.0.1 -u –i 1 –p 5566
+        ```
+        h1 is the server, and h2 is the client, use UDP with port 5566, output of h1 not shown on screen, saved to /out/result1.
+        ![results](iperf_execute_simpletopo.png)
+        Exit mininet terminal, stop controller, then clear links
+        ```
+        exit
+        switch panels
+        Stop Ryu with Ctrl-Z
+        switch back
+        mn -c
+        ```
+        * Step 3. Run topology with controller.py    
+        Run topo.py in one panel first.
+        ```
+        mn --custom topo.py --topo topo --link tc --controller remote
+        ```
+        ![results](step5-3mn.png)
+        Then run controller.py in another panel.
+        ```
+        ryu-manager controller.py --observe-links
+        ```
+        ![results](step5-3ryu.png)
+
+    * Step 4. Measure the bandwidth  
+        Use the iPerf commands to measure bandwidth
+        ```
+        h1 iperf -s -u -i 1 –p 5566 > ./out/result2 &
+        h2 iperf -c 10.0.0.1 -u –i 1 –p 5566
+        ```
+        h1 is the server, and h2 is the client, use UDP with port 5566, output of h1 not shown on screen, saved to /out/result1.
+        ![results](iperf_execute_con.png)
+        Noticed some error about missing paths in Ryu controller, the packets are still sent, judging from the results of the iperf log.  
+        Exit mininet terminal, stop controller, then clear links
+        ```
+        exit
+        switch panels
+        Stop Ryu with Ctrl-Z
+        switch back
+        mn -c
+        ```
+
+
 ### Discussion
 
 > TODO:
