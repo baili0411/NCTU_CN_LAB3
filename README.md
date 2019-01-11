@@ -46,6 +46,11 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
         mn
         ```
         ![Results](mn_result.png)
+        ```
+        sudo service oepenvswitch-switch start
+        mn
+        ```
+        ![Results](service_result.png)
 2. Example of Ryu SDN
 
 3. Mininet Topology
