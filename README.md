@@ -348,6 +348,16 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
         We create a list of edges to add to the network, by adding all the links, and using their source switch's id and the destination switch's id. The links are in both directions.
         We then print out all of these edges.
 
+    * Step 2:Write another Ryu controller  
+        Duplicate SimpleController.py and call name it controller.py.
+        ```
+        cp SimpleController.py controller.py
+        ```
+        Only modify switch_features_handler.
+        We need to change paths to:  
+        h1 -> s1 -> s3 -> h2  
+        h2 -> s3 -> s2 -> s1 -> h1 
+
 5. Measurement
 
 ### Discussion
