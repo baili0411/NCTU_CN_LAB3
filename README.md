@@ -506,8 +506,6 @@ controller.py
         ```
         h1 is the server, and h2 is the client, use UDP with port 5566, output of h1 not shown on screen, saved to /out/result1.
         ![results](iperf_execute_con.png)
-        Noticed some error about missing paths in Ryu controller, the packets are still sent, judging from the results of the iperf log.  
-        Exit mininet terminal, stop controller, then clear links
         ```
         exit
         switch panels
@@ -519,24 +517,34 @@ controller.py
 
 ### Discussion
 
-> TODO:
-> * Answer the following questions
+1. Describe the difference between packet-in and packet-out in detail.  
+    Packet-in messages are for sending captured packets from switches to OpenFlow controller.  
+    This happens when   
+    1. The match table has a explicit action asking for this action.
+    2. A miss in the match table.
 
-1. Describe the difference between packet-in and packet-out in detail.
+    Packet-out messages allow controllers to inject packets to switches.  
+    Packet-out messages can carry raw packets to inject into the switch, or indicate a local buffer on the switch containing a raw packet to release.
+    Packets injected to switches this way aren't treated in the same way as packets arriving from standard ports. They jump to the action set application stage in the standard packet processing pipeline. If the action set indicates table processing is necessary, then the input port id is used as the arrival port of the packet.
    
-2. What is “table-miss” in SDN?
-   
-3. Why is "`(app_manager.RyuApp)`" adding after the declaration of class in `controller.py`?
+2. What is “table-miss” in SDN?  
+   Table-miss is an entry in the match table that renders all Match Fields wildcards and have the lowest priority. A packet only matches to the table-miss when it doesn't match any other entry in the table, and then it will activate the action set in the table-miss entry.
+
+3. Why is "`(app_manager.RyuApp)`" adding after the declaration of class in `controller.py`?  
+    This means that the class is inherits from `(app_manager.RyuApp)`.
    
 4. Explain the following code in `controller.py`.
     ```python
     @set_ev_cls(ofp_event.EventOFPPacketIn, CONFIG_DISPATCHER)
     ```
+    This is a decoration for Ryu application. The following method becomes an event handler. ofp_event.EventOfPacketIn means that it handles packet-in events.  CONFIG_DISPATCHER means that it runs when the controller and switching are negotiating the version.
 
 5. What is the meaning of “datapath” in `controller.py`?
-   
-6. Why need to set "`ip_proto=17`" in the flow entry?
-   
+   A datapath is a class used to describe an OpenFlow switch connected to the controller.
+
+6. Why need to set "`ip_proto=17`" in the flow entry?  
+   Ip_proto is for setting the ip protocol, and 17 corresponds to udp, which we use for iPerf.
+
 7. Compare the differences between the iPerf results of `SimpleController.py` and `controller.py` in detail.
    
 8. Which forwarding rule is better? Why?
@@ -550,6 +558,7 @@ controller.py
 * **Mininet**
     * [Introduction to Mininet](https://github.com/mininet/mininet/wiki/Introduction-to-Mininet)
 * **Others**
+    * [OpenFlow structure](http://flowgrammable.org/sdn/openflow/message-layer/packetin/#PacketIn_1.2)
     * [Cheat Sheet of Markdown Syntax](https://www.markdownguide.org/cheat-sheet)
     * [Git Setup Guide](https://git-scm.com/book/zh-tw/v2/%E9%96%8B%E5%A7%8B-%E5%88%9D%E6%AC%A1%E8%A8%AD%E5%AE%9A-Git)
     * [Tmux shortcuts and cheatsheat](https://gist.github.com/MohamedAlaa/2961058)
