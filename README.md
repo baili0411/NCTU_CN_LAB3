@@ -513,7 +513,7 @@ controller.py
         switch back
         mn -c
         ```
-
+* Remember to merge the branches to master and push to Github.
 
 ### Discussion
 
@@ -545,9 +545,16 @@ controller.py
 6. Why need to set "`ip_proto=17`" in the flow entry?  
    Ip_proto is for setting the ip protocol, and 17 corresponds to udp, which we use for iPerf.
 
-7. Compare the differences between the iPerf results of `SimpleController.py` and `controller.py` in detail.
-   
-8. Which forwarding rule is better? Why?
+7. Compare the differences between the iPerf results of `SimpleController.py` and `controller.py` in detail.  
+    I actually retried the iPerf commands several times, made sure I used the correct controllers, doing it not using tmux and actual two terminals, but even though I done this many times, there isn't too much of a difference between the results of `SimpleController.py` and `controller.py`. In the files, the part where we need to change to different
+    links are different, and the other parts are unchanged, and topo.py does have the limits added to it.
+
+    From both the result files in out and the standard output in the console for both, both have similar transfer rate, and both have similar rate of dropped datagrams.
+    *Note that there might be some differences about the exact datagrams dropped and such between my screenshots and output files, since I redid them a lot of times, and have forgotten to take screenshots for the latest result.  
+
+8. Which forwarding rule is better? Why?  
+The results of my testing says that both roughly equal.  
+ If my results are wrong, by judging from the topology, the controller.py version may be better. The links s1-s2 and s2-s3 have much larger bandwidth than s1-s3, and we don't all use s1-s3 for h1-h2 and h2-h1. The actual results for both say that the bandwidth for both is similar, however. If that is indeed the case, with both links having similar delay and loss rate, then both might have similar performance, since UDP means that we won't be simultaneously sending from h1-h2 and h2-h1 all the time.
 
 ---
 ## References
