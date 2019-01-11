@@ -29,7 +29,7 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
 1. Environment Setup
     * Step 1: Join this lab on GitHub Classroom and get initial repository
     * Step 2: Login in to container in SSH.  
-    Access the container. Didn't change the password
+    Access the container. Login as root. Didn't change the password.
     * Step 3: Clone your Github repository and setup Git in the container.  
     First, setup global username and email
 
@@ -88,10 +88,7 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
 ---
 ## Contributors
 
-> TODO:
-> * Please replace "`YOUR_NAME`" and "`YOUR_GITHUB_LINK`" into yours
-
-* [YOUR_NAME](YOUR_GITHUB_LINK)
+* [Baili Deng](https://github.com/baili0411)
 * [David Lu](https://github.com/yungshenglu)
 
 ---
