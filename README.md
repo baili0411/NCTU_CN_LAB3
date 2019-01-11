@@ -31,12 +31,21 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
     * Step 2: Login in to container in SSH.  
     Access the container. Login as root. Didn't change the password.
     * Step 3: Clone your Github repository and setup Git in the container.  
-    First, setup global username and email
-    ```
+    First, setup global username and email  
+        ```
         git config --global user.name "Baili Deng"
         git config --global user.email "rayman0411@gmail.com"
-    ```
-
+        ```  
+        Then clone Github repository.
+        ```
+        git clone https://github.com/nctucn/lab3-baili0411.git Route_Configuration
+        ```
+    * Step 4. Run Mininet for testing
+        ```
+        sudo mn
+        mn
+        ```
+        ![Results](mn_result.png)
 2. Example of Ryu SDN
 
 3. Mininet Topology
