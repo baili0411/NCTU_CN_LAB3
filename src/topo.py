@@ -15,9 +15,6 @@ class Topology(Topo):
         s2 = self.addSwitch('s2')
         s3 = self.addSwitch('s3')
 
-		#Add controller into topology
-		c0 = self.addController('c0')
-
         # Add links into topology
         self.addLink(s1, h1, port1=1, port2=1)
         self.addLink(s3, h2, port1=1, port2=1)
