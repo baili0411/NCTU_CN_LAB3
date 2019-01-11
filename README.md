@@ -184,14 +184,14 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
         ```
         datapath.send_msg(mod)
         ```
-        We send the OpenFlow message we defined and wait for a reply.
+        We send the OpenFlow message we defined and add an entry to the flow table of the switch.
 
         ```
         @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
         def switch_features_handler(self, ev):
         ```
         The decorator means that this is now an event handler, and triggers when we get a features reply message from OpenFlow.  
-        CONFIG_DISPATCHER means that a version negotiated and sent features-request message event should be generated for this handler.
+        CONFIG_DISPATCHER means that this function is only called when receiving SwitchFeatures messages.
         ```
         msg = ev.msg
         datapath = msg.datapath
@@ -245,9 +245,108 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
 
         ```
         @set_ev_cls(ofp_event.EventOFPPacketIn, MAIN_DISPATCHER)
+        def packet_in_handler(self, ev):
+        ```
+        The decorator means that this is now an event handler, and triggers when we get a packet in message.
+        MAIN_DISPATCHER means this function is called when negotiation is finished.
+        ```
+        msg = ev.msg
+        datapath = msg.datapath
+        ofproto = datapath.ofproto
+        in_port = msg.match['in_port']
+        ```
+        Get packet_in info from ev.msg.  
+        get router from msg.datapath.  
+        Get protocol from datapath.ofproto.  
+        Get switch input port from msg.
+        ```
+        pkt = packet.Packet(msg.data)
+        ```
+        Create a packet class object pkt from msg.data.
+        ```
+        # Get the source and the destination ethernet address
+        eth = pkt.get_protocol(ethernet.ethernet)
+        eth_dst = eth.dst
+        eth_src = eth.src
+        ```
+        pkt.get_protocol gets the first protocol in pkt that matches ethernet.ethernet, and we obtain an ethernet protocol.
+        We then record the destination and source.
+        ```
+        dpid = datapath.id
+        self.mac_to_port.setdefault(dpid, {})
+        if eth_src not in self.net:
+            self.net.add_node(eth_src)
+            self.net.add_edge(dpid, eth_src, port=in_port)
+            self.net.add_edge(eth_src, dpid)
+        ```
+        We then check the switch's id.
+        If the switch doesn't exist in our mac_to_port dictionary, then we add dpid as index and {} as key.
+        If eth_src is not found in the self.net directed graph, we add the node eth_src, and created edges from dpid to eth_src, and eth_src to dpid. Since this is a pakcet_in, we know the input port, so we set the port.
+        ```
+        if eth_dst in self.net:
+            path = nx.shortest_path(self.net, eth_src, eth_dst)  
+            next = path[path.index(dpid) + 1]
+            out_port = self.net[dpid][next]['port']
+        else:
+            out_port = ofproto.OFPP_FLOOD
+        ```
+        Since we received a packet, we want to know where to send the packet next.  
+        If the destination is in our network graph, we calculate the shortest path, find out what is the next node we should go to from our current switch, and set the output port to the coressponding port from our current switch to the next node.  
+        If we don't know where the destination is (which means that it isn't in our graph, and we don't know it's mac address), we then send to all output ports, hoping to find a connection to it.
 
         ```
-        
+        match = datapath.ofproto_parser.OFPMatch(
+            in_port=in_port,
+            eth_dst=eth_dst)
+        actions = [datapath.ofproto_parser.OFPActionOutput(out_port)]
+        if out_port != ofproto.OFPP_FLOOD:
+            self.add_flow(
+                datapath=datapath,
+                priority=1,
+                match=match,
+                actions=actions)
+        out = datapath.ofproto_parser.OFPPacketOut(
+            datapath=datapath,
+            in_port=in_port,
+            actions=actions,
+            buffer_id=msg.buffer_id)
+        datapath.send_msg(out)
+        ```
+        Create a match for matching in_port and eth_dst, and the actions are to send a packet to out_port.  
+        If we know where to send the packet next (which means we aren't flooding), we add a flow table entry.
+        OFPPacketOut creates a message that sends the packet out. We set the router, input port, the actions, and the id.  
+        Finally, we send the message, and ask the router to send the packet.  
+        Note that the reason creating a flow avoids packet-in is that if the flow is created, the packet will just be sent based on the flow.
+
+        ```
+        @set_ev_cls(event.EventSwitchEnter)
+        def get_topology_data(self, ev):
+        ```
+        This method is called with a EventSwitchEnter event.
+        ```
+        switches_list = get_switch(self.topology_api, None)  
+        switches = [switch.dp.id for switch in switches_list]
+        self.net.add_nodes_from(switches)
+        print('*** List of switches')
+        for switch in switches_list:
+            print(switch)
+        ```
+        We get the list of switches connected to controller from our topology_api.  
+        we created a list of switch ids, and then add these as nodes in our network.  
+        We then print the switches.
+
+        ```
+        links_list = get_link(self.topology_api, None)
+        links = [(link.src.dpid, link.dst.dpid, {'port': link.src.port_no}) for link in links_list]
+        self.net.add_edges_from(links)
+        links = [(link.dst.dpid, link.src.dpid, {'port': link.dst.port_no}) for link in links_list]
+        self.net.add_edges_from(links)
+        print('*** List of links')
+        print(self.net.edges())
+        ```
+        We get the list of links from our topology_api.
+        We create a list of edges to add to the network, by adding all the links, and using their source switch's id and the destination switch's id. The links are in both directions.
+        We then print out all of these edges.
 
 5. Measurement
 
