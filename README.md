@@ -101,7 +101,20 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
         git checkout -b topology
         ```
     * Step 1. Build the topology via Mininet
-    
+    Build the topology based on topo.
+    ![Topology image](src/topo/topo.jpg)
+    Copy a topo.py based on SimpleTopo.py
+        ```
+        cp SimpleTopo.py topo.py
+        ```
+        After checking SimpleTopo.py, the parts we need to add are:  
+        * Although there isn't a controller c0 added in the SimpleTopo.py, based on the result of executing SimpleTopo.py with mininet, there is a controller c0, so no need to add that.
+        * Bandwidth, delay loss on links s1-s3, s1 -s2, s2-s3
+        ```
+        self.addLink(s1, s3, port1=3, port2=2, bw = 3, delay = '10ms', loss = 3)          
+        self.addLink(s1, s2, port1=2, port2=1, bw = 30, delay = '2ms', loss = 1)          
+        self.addLink(s3, s2, port1=3, port2=2, bw = 20, delay = '2ms', loss = 1) 
+        ```
 4. Ryu Controller
 
 5. Measurement
