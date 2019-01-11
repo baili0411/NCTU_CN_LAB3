@@ -77,8 +77,18 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
         ryu-mangager --observerlinks means that we observe link discovery events.  
         Result after running SimpleController.py
         ![Results](ryu_manager_sample_result.png)
+    * Step 3. Leave Ryu controller  
+    Leave mininet first.
+        ```
+        mininet>exit
+        ```
+        Switch Panel over to Ryu controller, and stop it with Ctrl-z.
+        Switch back to mininet panel, and clean links.
+        ```
+        mn -c
+        ```
 3. Mininet Topology
-
+    *
 4. Ryu Controller
 
 5. Measurement
