@@ -16,10 +16,28 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
 ---
 ## Execution
 
-> TODO:
-> * How to run your program?
-> * What is the meaning of the executing command (both Mininet and Ryu controller)?
-> * Show the screenshot of using iPerf command in Mininet (both `SimpleController.py` and `controller.py`)
+We run the program by  
+1. Emulate the network using mininet.
+2. Set up the remote controller using Ryu controller.
+
+The meaning of exeucting command
+```
+cd Route_Configuration/src
+mn --custom topology.py --topo topo --link tc --controller remote
+```
+--custom means we run mn using SimpleTopo.py, and invoke the "topo"  topology constructor (--topo topo), the "tc" link constructor(--link tc), and the "remote" controller constructor (--controller remote) in SimpleTopo.py  
+
+```
+ryu-manager SimpleController.py --observe-links
+```
+We execute ryu-manager, using SimpleController.py as our application.  
+--observe-links means that we observe link discovery events.  
+
+Screenshot of using iPerf command in Mininet:  
+SimpleController.py
+![results](iperf_execute_simpletopo.png)
+controller.py
+![results](iperf_execute_con.png)
 
 ---
 ## Description
@@ -71,8 +89,8 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
         cd Route_Configuration/src
         mn --custom SimpleTopo.py --topo topo --link tc --controller remote
         ```
+        --custom means we run mn using SimpleTopo.py, and invoke the "topo"  topology constructor (--topo topo), the "tc" link constructor(--link tc), and the "remote" controller constructor (--controller remote) in SimpleTopo.py  
         Result after running SimpleTopo.py  
-        --custom means we run mn, and invoke the "topo" topology constructor, the "tc" link constructor, and the "remote" controller constructor in SimpleTopo.py
     ![Results](mininet_sample_result.png)
     * Step 3. Run SimpleController.py in another terminal
     Switch the pane.
@@ -81,7 +99,8 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
         cd Route_Configuration/src
         ryu-manager SimpleController.py --observe-links
         ```
-        ryu-mangager --observerlinks means that we observe link discovery events.  
+        We execute ryu-manager, using SimpleController.py as our application.  
+        --observe-links means that we observe link discovery events.  
         Result after running SimpleController.py
         ![Results](ryu_manager_sample_result.png)
     * Step 3. Leave Ryu controller  
@@ -467,7 +486,7 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
         switch back
         mn -c
         ```
-        * Step 3. Run topology with controller.py    
+    * Step 3. Run topology with controller.py    
         Run topo.py in one panel first.
         ```
         mn --custom topo.py --topo topo --link tc --controller remote
