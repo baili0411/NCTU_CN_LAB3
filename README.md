@@ -28,7 +28,14 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
 
 1. Environment Setup
     * Step 1: Join this lab on GitHub Classroom and get initial repository
-    * Step 2: Login in to container in SSH.  
+    * Step 1.5: Clone repository outside of container, in own computer.  
+    Do this for easier editing of README.md.
+        ```
+        git clone https://github.com/nctucn/lab3-baili0411.git
+        Move into folder
+        git checkout -b Readme
+        ```
+    * Step 2: Login in to container using SSH.  
     Access the container. Login as root. Didn't change the password.
     * Step 3: Clone your Github repository and setup Git in the container.  
     First, setup global username and email  
@@ -88,7 +95,13 @@ In this lab, we are going to write a Python program with Ryu SDN framework to bu
         mn -c
         ```
 3. Mininet Topology
-    *
+    * Step 0. Create a new branch for adding the topology.
+    Create a new branch and move to it.
+        ```
+        git checkout -b topology
+        ```
+    * Step 1. Build the topology via Mininet
+    
 4. Ryu Controller
 
 5. Measurement
